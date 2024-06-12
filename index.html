@@ -48,12 +48,13 @@
 <header>
     <h1>CSE 168 Final Project</h1>
     <h3>Kaitlin Jarboe</h3>
-  <img src="erato_hd.png" alt="Hero Image" width="800" height="800">
+  
 
 </header>
-
+  <p><img src="erato_hd.png" alt="Hero Image" width="800" height="800"></p>
 <section>
     <h2>Project Description</h2>
+  
     <p>For my final project I extended my path tracer to be able to handle basic subsurface scattering following the method described here. Originally I had planned on using the method described in <a href="http://graphics.ucsd.edu/~henrik/papers/bssrdf/">Jenson’s paper</a> but ultimately ended up using  <a href="https://www.iryoku.com/separable-sss/">separable subsurface scattering</a> in my own implementation.</p>
   <p>I started my project by adding .obj file parsing using the <a href="https://github.com/tinyobjloader/tinyobjloader/tree/release">tinyobjloader library</a>. This is how most of the geometry in my images is loaded in, with the exception of lights.</p>
   <p>The more challenging part of this project was implementing the subsurface scattering task. While the final result ended up being relatively simple, reading through the different papers and blog posts and understanding the many different ways this technique can be implemented was challenging since many require the renderer to keep track of complex material properties in order to perform the most accurate scattering calculations. Additionally, I had trouble figuring out how to generate a subsurface scattering area sample in a way that was simple enough for this project and didn’t need the aforementioned material properties or multiple importance sampling, since I was somewhat short on time. My solution ended up looking something like this, with some value of epsilon passed in through the scene file:<p></p><img src="sampling.png" alt="SSS Sampling Procedure"></img></p>
