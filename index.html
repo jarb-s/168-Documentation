@@ -1,1 +1,182 @@
-"CSE 168 Final Project Documentation"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaitlin Jarboe’s Comp Sci Portfolio</title>
+    <style>
+        body {
+            font-family: <link rel="preconnect" href="https://fonts.googleapis.com">
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+          <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+          
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #8eece2;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+           <!-- background-image: url('purple_sky.jpg');-->
+       
+        }
+        section {
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 800px;
+            background-color: #fcecec;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            margin-top: 0;
+        }
+        p {
+            line-height: 1.6;
+        }
+      img {
+        background-color:#f0f0f0 ;
+        width: 100%; height: auto;
+        
+      }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>CSE 168 Final Project</h1>
+    <h3>Kaitlin Jarboe</h3>
+  <img src="erato_hd.png" alt="Hero Image">
+
+</header>
+
+<section>
+    <h2>Project Description</h2>
+    <p>For my final project I extended my path tracer to be able to handle basic subsurface scattering following the method described here. Originally I had planned on using the method described in <a href="http://graphics.ucsd.edu/~henrik/papers/bssrdf/">Jenson’s paper</a> but ultimately ended up using  <a href="https://www.iryoku.com/separable-sss/">separable subsurface scattering</a> in my own implementation.</p>
+  <p>I started my project by adding .obj file parsing using the <a href="https://github.com/tinyobjloader/tinyobjloader/tree/release">tinyobjloader library</a>. This is how most of the geometry in my images is loaded in, with the exception of lights.</p>
+  <p>The more challenging part of this project was implementing the subsurface scattering task. While the final result ended up being relatively simple, reading through the different papers and blog posts and understanding the many different ways this technique can be implemented was challenging since many require the renderer to keep track of complex material properties in order to perform the most accurate scattering calculations. Additionally, I had trouble figuring out how to generate a subsurface scattering area sample in a way that was simple enough for this project and didn’t need the aforementioned material properties or multiple importance sampling, since I was somewhat short on time. My solution ended up looking something like this, with some value of epsilon passed in through the scene file:<p></p><img src="sampling.png" alt="SSS Sampling Procedure"></img></p>
+</p>
+  
+</section>
+
+<section>
+   <!-- <h2>Project: [Your Project Name]</h2>-->
+
+ <p> Basic SSSS:
+  <ol>
+    <li>Check if the material has light scattering</li>
+ <li> Generate a sample for the endpoint of the light bounce after it finishes traveling through the material>/li>
+ <li></li> If sampling was successful, continue with the subsurface light modifier calculations using the material parameters</li>
+  <li>Generate new hemisphere samples for recursion at this endpoint and recurse</li></ol></p>
+
+    <p>For my images, I focused on rendering three materials: marble, skin, and jade, but many more can be rendered using the material parameters in the .scene file! All images use 128 spp and are 1280x1280 unless otherwise stated.</p>
+   <p> My hero image is a marble sculpture with dramatic lighting to showcase the effects of subsurface scattering. It is 5120x5120 with 512 spp but here I have provided smaller versions for comparison purposes.</p>
+    
+</section>
+<section>
+  <table style="width:100%">
+    <tr>
+      <th>No SSS</th>
+      <th> With SSS</th>
+    </tr>
+    <tr>
+      <th><img src="erato_base.png" alt="Erato without SSS"></img></th>
+      <th> <img src="erato.png" alt="Erato with SSS"></th>
+    </tr>
+  </table>
+  <p>I also rendered this lion statue to show the same material under different lighting conditions.</p>
+  <table style="width:100%">
+    <tr>
+      <th>No SSS</th>
+      <th> With SSS</th>
+    </tr>
+    <tr>
+      <th><img src="lion_base.png" alt="Lion without SSS"></img></th>
+      <th> <img src="lion.png" alt="Lion with SSS"></img></th>
+    </tr>
+  </table>
+  <p>Next I decided to render a 3d-modeled head since this technique is often used to more accurately render skin.</p>
+  <table style="width:100%">
+    <tr>
+      <th>No SSS</th>
+      <th> With SSS</th>
+    </tr>
+    <tr>
+      <th><img src="head_base.png" alt="head without SSS"></img></th>
+      <th> <img src="head.png" alt="head with SSS"></img></th>
+    </tr>
+  </table>
+  <p>Finally, I wanted to show subsurface scattering on a more reflective material and rendered a jade Stanford dragon.</p>
+  <table style="width:100%">
+    <tr>
+      <th>No SSS</th>
+      <th> With SSS</th>
+    </tr>
+    <tr>
+      <th><img src="dragon_base.png" alt="Dragon without SSS""></img></th>
+      <th> <img src="dragon.png" alt="Dragon with SSS""></img></th>
+    </tr>
+  </table>
+  
+</section>
+  <section>
+    <p>Here are all the materials used under the same lighting conditions. For each pair of spheres, the left one has subsurface scattering enabled, and on the right, the material is rendered with the standard BRDF from homework 3.</p>
+    <p><img src="sss.png" alt="Comparison Image of Materials"></p>
+  </section>
+<section>
+  <h3>Documentation</h3>
+  <ul><li>New obj command in sceneloader that converts vertices, tris, and materials to known types</li>
+    <li>Added refraction, scattering, and scaling material parameters</li>
+    <li>Updated pathtracer structure to abstract helper functions outside of main loop and allow for easier extensions</li>
+    <li>Rewrote hw3 code to be more accurate and removed second half of hw4 implementation since it was incorrect and unnecessary for the project</li>
+  </ul>
+  <h3>Notes</h3>
+  <ul><li>Had to rewrite code from prev homework assignments, which took time away from working on the project itself</li>
+    <li>Have to manually set sss pdf instead of calculating it from material data like in most implementations</li>
+    
+  </ul>
+  <h3>Next steps (over the summer)</h3>
+  <ul><li>Fully implement obj files and update scene vars to use tinyobjloader class structures</li>
+    <li>Finish microfacet reflection from hw4 and implement refraction</li>
+    <li>Implement mis from hw4 and use for sss</li>
+
+  </ul>
+</section>
+  <section>
+    <h2>References</h2>
+    <h3>Resources</h3>
+    <p> <a href="https://github.com/tinyobjloader/tinyobjloader/tree/release">tinyobjloader</a></p>
+    <p>I got most of my models from the McGuire Computer Graphics Archive:
+    Morgan McGuire, Computer Graphics Archive, July 2017 <a href="https://casual-effects.com/data">(https://casual-effects.com/data)</a>
+    The lion statue is from: <a href="https://skfb.ly/oGDqI">https://skfb.ly/oGDqI</a>
+</p>
+  </section>
+  <section>
+    <h3>Papers</h3>
+    <p>Henrik Wann Jensen, Stephen R. Marschner, Marc Levoy and Pat Hanrahan: "A Practical Model for Subsurface Light Transport". Proceedings of SIGGRAPH'2001.
+      <a href="https://graphics.stanford.edu/papers/bssrdf/bssrdf.pdf">https://graphics.stanford.edu/papers/bssrdf/bssrdf.pdf</a> </p>
+
+    <p>Separable Subsurface Scattering:  <a href="https://www.iryoku.com/separable-sss/"> https://www.iryoku.com/separable-sss</a></p>
+    <p>Approximate Reflectance Profiles for Efficient Subsurface Scattering: <a href="https://graphics.pixar.com/library/ApproxBSSRDF/paper.pdf"> https://graphics.pixar.com/library/ApproxBSSRDF/paper.pdf</a>
+</p>
+    <p>BSSRDF Importance Sampling: <a href="https://dl.acm.org/doi/10.1145/2504459.2504520">https://dl.acm.org/doi/10.1145/2504459.2504520</a> and
+<a href="https://www.imageworks.com/sites/default/files/2023-10/BSSRDF-importance-sampling-imageworks-library-BSSRDF-sampling.pdf"> https://www.imageworks.com/sites/default/files/2023-10/BSSRDF-importance-sampling-imageworks-library-BSSRDF-sampling.pdf</a></p>
+  </section>
+  <section>
+    <h3>Websites</h3>
+    <p>I followed A Graphics Guy’s Notes’ blog post on the topic greatly on my journey to understand how separable subsurface scattering could be realistically implemented in my project: <a href="https://agraphicsguynotes.com/posts/practical_tips_for_implementing_subsurface_scattering_in_a_ray_tracer/">https://agraphicsguynotes.com/posts/practical_tips_for_implementing_subsurface_scattering_in_a_ray_tracer/</a></p>
+    <p>I also referenced the 3rd edition of the pbr book: <a href="https://www.pbr-book.org/3ed-2018/Volume_Scattering/The_BSSRDF#SeparableBSSRDFs">https://www.pbr-book.org/3ed-2018/Volume_Scattering/The_BSSRDF#SeparableBSSRDFs</a></p><a href="https://www.pbr-book.org/3ed-2018/Light_Transport_II_Volume_Rendering/Sampling_Subsurface_Reflection_Functions"></a>https://www.pbr-book.org/3ed-2018/Light_Transport_II_Volume_Rendering/Sampling_Subsurface_Reflection_Functions
+<p></p>    
+
+    
+  </section>
+  
+  
+<footer>
+    <p>&copy; 2024 Kaitlin Jarboe. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
